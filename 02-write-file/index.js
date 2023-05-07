@@ -13,23 +13,30 @@ fs.truncate(pathFile, 0, (error) => {
 function saveTextToFile() {
   fs.appendFile(pathFile, text, (error) => {
     if (error) throw error;
-    console.log(`\nAdded to file: ${text}`);
+    if (text) console.log(`\nAdded to file: ${text}`);
   });
 }
+saveTextToFile();
 
-consoleReadLine.question('Insert text: ', (answer) => {
+consoleReadLine.question('\nInsert text: ', (answer) => {
+  if (answer === 'exit') {
+    console.log('\nBye!');
+    consoleReadLine.close();
+    return;
+  } else {
     text = answer + '\n';
     saveTextToFile();
-    consoleReadLine.on('line', (answer) => {
-      if (answer === 'exit') {
-        console.log('\nBye!');
-        consoleReadLine.close();
-        return;
-      } else {
-        text = answer + '\n';
-        saveTextToFile();
-      }
-    });
+  }
+  consoleReadLine.on('line', (line) => {
+    if (line === 'exit') {
+      console.log('\nBye!');
+      consoleReadLine.close();
+      return;
+    } else {
+      text = line + '\n';
+      saveTextToFile();
+    }
+  });
 });
 
 consoleReadLine.on('SIGINT', () => {
