@@ -8,11 +8,12 @@ fs.readdir(pathFolder, { withFileTypes: true }, (error, files) => {
     return;
   }
 
-  files.forEach((file) => {
+  files.forEach(async (file) => {
     if (file.isFile()) {
       const filePath = path.join(pathFolder, file.name);
-      const fileSize = fs.statSync(filePath).size;
-      console.log(`${file.name} - ${path.extname(file.name).slice(1)} - ${(fileSize/1024).toFixed(2)} kb`);
+      const fileStats = await fs.promises.stat(filePath);
+      const fileSize = fileStats.size;
+      console.log(`${file.name} - ${path.extname(file.name).slice(1)} - ${(fileSize / 1024).toFixed(2)} kb`);
     } else {
       return;
     }
