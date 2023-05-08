@@ -24,7 +24,16 @@ async function makeBundle() {
     }
     for (const cssFile of cssArr) {
       const readStream = fs.createReadStream(cssFile);
-      readStream.pipe(writeStream, { end: false });
+      for await (const chunk of readStream) {
+        const firstLine = chunk.toString().split('\n')[0];
+        if (firstLine.trim() === '') {
+          chunk = chunk.slice(chunk.indexOf('\n') + 1);
+        }
+        writeStream.write(chunk);
+      }
+      if (cssFile !== cssArr[cssArr.length - 1]) {
+        writeStream.write('\n');
+      }
     }
     console.log(`All css files have been merged into ${basename(bundle)}!`);
   } catch (error) {
