@@ -28,7 +28,7 @@ async function createIndexFile() {
 
     const articlesLines = articles.split('\n');
     const articlesFirstLine = articlesLines[0];
-    const articlesWithoutFirst = articlesLines.slice(1).map(line => '    ' + line).join('\n');
+    const articlesWithoutFirst = articlesLines.slice(1).map(line => '      ' + line).join('\n');
     
     const footerLines = footer.split('\n');
     const footerFirstLine = footerLines[0];
